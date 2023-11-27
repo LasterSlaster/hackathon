@@ -137,52 +137,40 @@ int main() {
 
   // Initialize world and particles
   World world = {500, 500};
-  Particle** yellow = (Particle**)malloc(COUNT_YELLOW_PARTICLES * sizeof(Particle*));
-  Particle** red = (Particle**)malloc(COUNT_RED_PARTICLES * sizeof(Particle*));
-  Particle** green = (Particle**)malloc(COUNT_GREEN_PARTICLES * sizeof(Particle*));
-
-  Color colorYellow;
-  Color colorRed;
-  Color colorGreen;
-  colorYellow.r = 255;
-  colorYellow.g = 255;
-  colorYellow.b = 0;
-  colorYellow.a = 0;
-  colorRed.r = 255;
-  colorRed.g = 0;
-  colorRed.b = 0;
-  colorRed.a = 0;
-  colorGreen.r = 0;
-  colorGreen.g = 200;
-  colorGreen.b = 0;
-  colorGreen.a = 0;
-
-  createParticles(yellow, COUNT_YELLOW_PARTICLES, world.xlim, world.ylim, colorYellow);
-  createParticles(red, COUNT_RED_PARTICLES, world.xlim, world.ylim, colorRed);
-  createParticles(green, COUNT_GREEN_PARTICLES, world.xlim, world.ylim, colorGreen);
   // !!ADD NEW COLOR: Define your new color here an create a particles array for it
+  Color color_yellow = {.r=255, .g=255, .b=0, .a=0};
+  Particle** yellow_particles = (Particle**)malloc(COUNT_YELLOW_PARTICLES * sizeof(Particle*));
+  Color color_red = {.r=255, .g=0, .b=0, .a=0};
+  Particle** red_particles = (Particle**)malloc(COUNT_RED_PARTICLES * sizeof(Particle*));
+  Color color_green = {.r=0, .g=255, .b=0, .a=0};
+  Particle** green_particles = (Particle**)malloc(COUNT_GREEN_PARTICLES * sizeof(Particle*));
+
   if (yellow_particles == NULL || red_particles == NULL || green_particles == NULL) {
     // Handle memory allocation failure
     fprintf(stderr, "Memory allocation failed.\n");
     exit(EXIT_FAILURE);
   }
+
   // !!ADD NEW COLOR: Populate your new color with particles here
   // populate particle arrays
+  createParticles(yellow_particles, COUNT_YELLOW_PARTICLES, world.xlim, world.ylim, color_yellow);
+  createParticles(red_particles, COUNT_RED_PARTICLES, world.xlim, world.ylim, color_red);
+  createParticles(green_particles, COUNT_GREEN_PARTICLES, world.xlim, world.ylim, color_green);
 
   // reference the color particle arrays in an aggregated particles array
   Particle* particles[MAX_PARTICLES];
 
   // !!ADD NEW COLOR: Add your new color to the particles array
   for (int i = 0; i < COUNT_YELLOW_PARTICLES; ++i) {
-    particles[i] = yellow[i];
+    particles[i] = yellow_particles[i];
   }
 
   for (int i = 0; i < COUNT_RED_PARTICLES; ++i) {
-    particles[i + COUNT_YELLOW_PARTICLES] = red[i];
+    particles[i + COUNT_YELLOW_PARTICLES] = red_particles[i];
   }
 
   for (int i = 0; i < COUNT_GREEN_PARTICLES; ++i) {
-    particles[i + COUNT_YELLOW_PARTICLES + COUNT_RED_PARTICLES] = green[i];
+    particles[i + COUNT_YELLOW_PARTICLES + COUNT_RED_PARTICLES] = green_particles[i];
   }
 
   // pointer to an pointer pointing to a pointer pointing to
@@ -196,12 +184,12 @@ int main() {
 
   /* Particle* steps[N]; */
   for (int k = 0; k < N; ++k) {
-    rule(yellow, COUNT_YELLOW_PARTICLES, yellow, COUNT_YELLOW_PARTICLES, -0.001, world.xlim, world.ylim, 80);
-    rule(yellow, COUNT_YELLOW_PARTICLES, red, COUNT_RED_PARTICLES, -0.001, world.xlim, world.ylim, 100);
-    rule(red, COUNT_RED_PARTICLES, yellow, COUNT_YELLOW_PARTICLES, 0.01, world.xlim, world.ylim, 50);
-    rule(red, COUNT_RED_PARTICLES, red, COUNT_RED_PARTICLES, 0.002, world.xlim, world.ylim, 100);
-    rule(green, COUNT_GREEN_PARTICLES, red, COUNT_RED_PARTICLES, -0.002, world.xlim, world.ylim, 100);
     // !!ADD NEW COLOR: Add your rules for new colors here
+    rule(yellow_particles, COUNT_YELLOW_PARTICLES, yellow_particles, COUNT_YELLOW_PARTICLES, -0.001, world.xlim, world.ylim, 80);
+    rule(yellow_particles, COUNT_YELLOW_PARTICLES, red_particles, COUNT_RED_PARTICLES, -0.001, world.xlim, world.ylim, 100);
+    rule(red_particles, COUNT_RED_PARTICLES, yellow_particles, COUNT_YELLOW_PARTICLES, 0.01, world.xlim, world.ylim, 50);
+    rule(red_particles, COUNT_RED_PARTICLES, red_particles, COUNT_RED_PARTICLES, 0.002, world.xlim, world.ylim, 100);
+    rule(green_particles, COUNT_GREEN_PARTICLES, red_particles, COUNT_RED_PARTICLES, -0.002, world.xlim, world.ylim, 100);
 
     if (k % 100 == 0) {
       printf("N = %d/%d\n", k, N);

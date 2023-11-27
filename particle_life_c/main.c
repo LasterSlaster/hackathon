@@ -70,6 +70,11 @@ void createParticles(Particle** particles, int count, int sizeX, int sizeY,
                      Color color) {
   for (int i = 0; i < count; ++i) {
     particles[i] = (Particle*)malloc(sizeof(Particle));
+    if (particles[i] == NULL) {
+      // Handle memory allocation failure
+      fprintf(stderr, "Memory allocation failed.\n");
+      exit(EXIT_FAILURE);
+    }
     particles[i]->x0 = particles[i]->x1 = rand() % sizeX;
     particles[i]->y0 = particles[i]->y1 = rand() % sizeY;
     particles[i]->vx = 0.101;
@@ -115,6 +120,11 @@ Particle** copyParticles(Particle** source, int count) {
 
   for (int i = 0; i < count; ++i) {
     destination[i] = (Particle*)malloc(sizeof(Particle));
+    if (destination[i] == NULL) {
+      // Handle memory allocation failure
+      fprintf(stderr, "Memory allocation failed.\n");
+      exit(EXIT_FAILURE);
+    }
     memcpy(destination[i], source[i], sizeof(Particle));
   }
 
@@ -151,6 +161,11 @@ int main() {
   createParticles(red, COUNT_RED_PARTICLES, world.xlim, world.ylim, colorRed);
   createParticles(green, COUNT_GREEN_PARTICLES, world.xlim, world.ylim, colorGreen);
   // !!ADD NEW COLOR: Define your new color here an create a particles array for it
+  if (yellow_particles == NULL || red_particles == NULL || green_particles == NULL) {
+    // Handle memory allocation failure
+    fprintf(stderr, "Memory allocation failed.\n");
+    exit(EXIT_FAILURE);
+  }
   // !!ADD NEW COLOR: Populate your new color with particles here
   // populate particle arrays
 

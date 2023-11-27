@@ -7,7 +7,9 @@
 #include <stdlib.h>
 #include <time.h>
 
+// N represents the amount of simulation steps
 #define N 1000
+// !!ADD NEW COLOR: Define a constant for the amount of particles of your new color and add them to the total amount of particles in MAX_PARTICLES
 #define MAX_PARTICLES 30
 #define COUNT_RED_PARTICLES 10
 #define COUNT_YELLOW_PARTICLES 10
@@ -44,6 +46,7 @@ void rule(Particle** particles1, int count1, Particle** particles2, int count2,
         fy += F * dy;
       }
     }
+
     particles1[i]->vx = (particles1[i]->vx + fx) * 0.891;
     particles1[i]->vy = (particles1[i]->vy + fy) * 0.891;
     particles1[i]->x0 = particles1[i]->x1;
@@ -119,8 +122,10 @@ Particle** copyParticles(Particle** source, int count) {
 }
 
 int main() {
+  // required to seed the random number generator (rand())
   srand(time(NULL));
 
+  // Initialize world and particles
   World world = {500, 500};
   Particle** yellow = (Particle**)malloc(COUNT_YELLOW_PARTICLES * sizeof(Particle*));
   Particle** red = (Particle**)malloc(COUNT_RED_PARTICLES * sizeof(Particle*));
@@ -145,9 +150,14 @@ int main() {
   createParticles(yellow, COUNT_YELLOW_PARTICLES, world.xlim, world.ylim, colorYellow);
   createParticles(red, COUNT_RED_PARTICLES, world.xlim, world.ylim, colorRed);
   createParticles(green, COUNT_GREEN_PARTICLES, world.xlim, world.ylim, colorGreen);
+  // !!ADD NEW COLOR: Define your new color here an create a particles array for it
+  // !!ADD NEW COLOR: Populate your new color with particles here
+  // populate particle arrays
 
+  // reference the color particle arrays in an aggregated particles array
   Particle* particles[MAX_PARTICLES];
 
+  // !!ADD NEW COLOR: Add your new color to the particles array
   for (int i = 0; i < COUNT_YELLOW_PARTICLES; ++i) {
     particles[i] = yellow[i];
   }
@@ -176,6 +186,7 @@ int main() {
     rule(red, COUNT_RED_PARTICLES, yellow, COUNT_YELLOW_PARTICLES, 0.01, world.xlim, world.ylim, 50);
     rule(red, COUNT_RED_PARTICLES, red, COUNT_RED_PARTICLES, 0.002, world.xlim, world.ylim, 100);
     rule(green, COUNT_GREEN_PARTICLES, red, COUNT_RED_PARTICLES, -0.002, world.xlim, world.ylim, 100);
+    // !!ADD NEW COLOR: Add your rules for new colors here
 
     if (k % 100 == 0) {
       printf("N = %d/%d\n", k, N);

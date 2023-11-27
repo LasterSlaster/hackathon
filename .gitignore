@@ -11,6 +11,9 @@ compile_commands.json
 CTestTestfile.cmake
 _deps
 
+# C
+particle_life_c/particle_life_c
+particle_life_c/.clangd
 
 # Prerequisites
 *.d
